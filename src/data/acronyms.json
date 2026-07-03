@@ -1,0 +1,147 @@
+[
+  {
+    "acronym": "AWS",
+    "meaning": "Amazon Web Services",
+    "category": "Cloud"
+  },
+  {
+    "acronym": "HDMI",
+    "meaning": "High-Definition Multimedia Interface",
+    "category": "Hardware"
+  },
+  {
+    "acronym": "NAT",
+    "meaning": "Network Address Translation",
+    "category": "Network"
+  },
+  {
+    "acronym": "DNS",
+    "meaning": "Domain Name System",
+    "category": "Network"
+  },
+  {
+    "acronym": "TCP",
+    "meaning": "Transmission Control Protocol",
+    "category": "Network"
+  },
+  {
+    "acronym": "IP",
+    "meaning": "Internet Protocol",
+    "category": "Network"
+  },
+  {
+    "acronym": "HTTP",
+    "meaning": "HyperText Transfer Protocol",
+    "category": "Web"
+  },
+  {
+    "acronym": "HTTPS",
+    "meaning": "HyperText Transfer Protocol Secure",
+    "category": "Web"
+  },
+  {
+    "acronym": "URL",
+    "meaning": "Uniform Resource Locator",
+    "category": "Web"
+  },
+  {
+    "acronym": "API",
+    "meaning": "Application Programming Interface",
+    "category": "Development"
+  },
+  {
+    "acronym": "JSON",
+    "meaning": "JavaScript Object Notation",
+    "category": "Development"
+  },
+  {
+    "acronym": "XML",
+    "meaning": "eXtensible Markup Language",
+    "category": "Development"
+  },
+  {
+    "acronym": "HTML",
+    "meaning": "HyperText Markup Language",
+    "category": "Web"
+  },
+  {
+    "acronym": "CSS",
+    "meaning": "Cascading Style Sheets",
+    "category": "Web"
+  },
+  {
+    "acronym": "JS",
+    "meaning": "JavaScript",
+    "category": "Development"
+  },
+  {
+    "acronym": "SQL",
+    "meaning": "Structured Query Language",
+    "category": "Database"
+  },
+  {
+    "acronym": "NoSQL",
+    "meaning": "Not Only SQL",
+    "category": "Database"
+  },
+  {
+    "acronym": "RAM",
+    "meaning": "Random Access Memory",
+    "category": "Hardware"
+  },
+  {
+    "acronym": "CPU",
+    "meaning": "Central Processing Unit",
+    "category": "Hardware"
+  },
+  {
+    "acronym": "GPU",
+    "meaning": "Graphics Processing Unit",
+    "category": "Hardware"
+  },
+  {
+    "acronym": "SSD",
+    "meaning": "Solid State Drive",
+    "category": "Hardware"
+  },
+  {
+    "acronym": "LAN",
+    "meaning": "Local Area Network",
+    "category": "Network"
+  },
+  {
+    "acronym": "WAN",
+    "meaning": "Wide Area Network",
+    "category": "Network"
+  },
+  {
+    "acronym": "VPN",
+    "meaning": "Virtual Private Network",
+    "category": "Network"
+  },
+  {
+    "acronym": "OS",
+    "meaning": "Operating System",
+    "category": "Software"
+  },
+  {
+    "acronym": "UI",
+    "meaning": "User Interface",
+    "category": "Design"
+  },
+  {
+    "acronym": "UX",
+    "meaning": "User Experience",
+    "category": "Design"
+  },
+  {
+    "acronym": "CI",
+    "meaning": "Continuous Integration",
+    "category": "DevOps"
+  },
+  {
+    "acronym": "CD",
+    "meaning": "Continuous Deployment",
+    "category": "DevOps"
+  }
+]
