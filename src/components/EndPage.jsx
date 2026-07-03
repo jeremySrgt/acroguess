@@ -1,5 +1,5 @@
-function EndPage({ results, onBackToHome }) {
-  const { score, correctCount, incorrectCount, total } = results || {}
+function EndPage({ results, onBackToGame }) {
+  const { score, correctCount, incorrectCount, total, history = [] } = results || {}
   
   // Calculer le pourcentage de réussite
   const accuracy = total > 0 ? Math.round((correctCount / total) * 100) : 0
@@ -29,19 +29,43 @@ function EndPage({ results, onBackToHome }) {
         </div>
       </div>
 
+      {/* Historique des réponses */}
+      {history.length > 0 && (
+        <div className="card history-card">
+          <h3 style={{ color: 'var(--neon-blue)', marginBottom: '15px', textAlign: 'center' }}>
+            RÉCAPITULATIF
+          </h3>
+          <div className="history-list">
+            {history.map((entry, index) => (
+              <div 
+                key={index} 
+                className={`history-item ${entry.isCorrect ? 'correct' : 'incorrect'}`}
+              >
+                <span className="history-acronym">{entry.acronym}:</span>
+                <span className="history-answers">
+                  <span className="history-user-answer">
+                    {entry.userAnswer || '(pas de réponse)'}
+                  </span>
+                  {!entry.isCorrect && (
+                    <>
+                      <span style={{ color: 'var(--text-secondary)' }}> → </span>
+                      <span className="history-correct-answer">{entry.correctAnswer}</span>
+                    </>
+                  )}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div style={{ margin: '30px 0' }}>
         <button 
           className="btn btn-primary" 
-          onClick={onBackToHome}
+          onClick={onBackToGame}
           style={{ marginRight: '15px' }}
         >
           JOUER À NOUVEAU
-        </button>
-        <button 
-          className="btn" 
-          onClick={onBackToHome}
-        >
-          MENU PRINCIPAL
         </button>
       </div>
     </div>

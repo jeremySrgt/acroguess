@@ -8,16 +8,18 @@ function GamePage({ onGameEnd }) {
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION)
   const [currentAcronym, setCurrentAcronym] = useState(null)
   const [answer, setAnswer] = useState('')
-  const [feedback, setFeedback] = useState(null) // { type: 'correct'|'incorrect', message: string }
+  const [feedback, setFeedback] = useState(null)
   const [score, setScore] = useState(0)
   const [correctCount, setCorrectCount] = useState(0)
   const [incorrectCount, setIncorrectCount] = useState(0)
   const [usedAcronyms, setUsedAcronyms] = useState([])
-  const [isGameActive, setIsGameActive] = useState(false)
+  const [isTimerRunning, setIsTimerRunning] = useState(false)
+  const [showInstructions, setShowInstructions] = useState(false)
+  const [gameHistory, setGameHistory] = useState([])
 
-  // Normaliser une chaîne pour la comparaison (insensible à la casse et aux espaces)
+  // Normaliser une chaîne : insensible à la casse, espaces multiples, et tirets
   const normalizeString = (str) => {
-    return str.toLowerCase().trim().replace(/\s+/g, ' ')
+    return str.toLowerCase().trim().replace(/\s+/g, ' ').replace(/-/g, '')
   }
 
   // Démarrer une nouvelle question
@@ -30,7 +32,6 @@ function GamePage({ onGameEnd }) {
     let newUsedAcronyms = [...usedAcronyms]
     
     if (availableAcronyms.length === 0) {
-      // Si tous les acronymes ont été utilisés, on réinitialise
       newUsedAcronyms = []
       const allAcronyms = [...acronymsData]
       const randomIndex = Math.floor(Math.random() * allAcronyms.length)
@@ -48,30 +49,31 @@ function GamePage({ onGameEnd }) {
     setUsedAcronyms(newUsedAcronyms)
   }, [usedAcronyms])
 
-  // Démarrer le jeu
+  // Démarrer le timer
+  const startTimer = useCallback(() => {
+    if (isTimerRunning) return
+    setIsTimerRunning(true)
+  }, [isTimerRunning])
+
+  // Démarrer le jeu avec le premier acronyme
   useEffect(() => {
     startNewQuestion()
-    setIsGameActive(true)
-    
-    return () => {
-      setIsGameActive(false)
-    }
   }, [])
 
-  // Timer
+  // Timer (ne démarre que quand isTimerRunning est vrai)
   useEffect(() => {
-    if (!isGameActive) return
+    if (!isTimerRunning) return
     
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(timer)
-          // Fin du jeu
           onGameEnd({
             score,
             correctCount,
             incorrectCount,
-            total: correctCount + incorrectCount
+            total: correctCount + incorrectCount,
+            history: gameHistory
           })
           return 0
         }
@@ -80,7 +82,7 @@ function GamePage({ onGameEnd }) {
     }, 1000)
     
     return () => clearInterval(timer)
-  }, [isGameActive, timeLeft, score, correctCount, incorrectCount, onGameEnd])
+  }, [isTimerRunning, timeLeft, score, correctCount, incorrectCount, onGameEnd, gameHistory])
 
   // Gérer la soumission de la réponse
   const handleSubmit = (e) => {
@@ -91,8 +93,17 @@ function GamePage({ onGameEnd }) {
     const normalizedAnswer = normalizeString(answer)
     const normalizedMeaning = normalizeString(currentAcronym.meaning)
     
-    if (normalizedAnswer === normalizedMeaning) {
-      // Bonne réponse
+    const isCorrect = normalizedAnswer === normalizedMeaning
+    
+    const historyEntry = {
+      acronym: currentAcronym.acronym,
+      userAnswer: answer,
+      correctAnswer: currentAcronym.meaning,
+      isCorrect: isCorrect
+    }
+    setGameHistory(prev => [...prev, historyEntry])
+    
+    if (isCorrect) {
       setScore(prev => prev + 1)
       setCorrectCount(prev => prev + 1)
       setFeedback({
@@ -100,7 +111,6 @@ function GamePage({ onGameEnd }) {
         message: 'CORRECT !'
       })
     } else {
-      // Mauvaise réponse
       setIncorrectCount(prev => prev + 1)
       setFeedback({
         type: 'incorrect',
@@ -108,10 +118,17 @@ function GamePage({ onGameEnd }) {
       })
     }
     
-    // Passer à la question suivante après 1 seconde
     setTimeout(() => {
       startNewQuestion()
     }, 1000)
+  }
+
+  // Gérer l'input change
+  const handleInputChange = (e) => {
+    setAnswer(e.target.value)
+    if (!isTimerRunning && timeLeft === GAME_DURATION) {
+      startTimer()
+    }
   }
 
   // Gérer l'appui sur Entrée
@@ -123,13 +140,27 @@ function GamePage({ onGameEnd }) {
 
   // Quitter le jeu
   const handleQuit = () => {
-    setIsGameActive(false)
+    setIsTimerRunning(false)
     onGameEnd({
       score,
       correctCount,
       incorrectCount,
-      total: correctCount + incorrectCount
+      total: correctCount + incorrectCount,
+      history: gameHistory
     })
+  }
+
+  // Réinitialiser le jeu
+  const handleRestart = () => {
+    setTimeLeft(GAME_DURATION)
+    setScore(0)
+    setCorrectCount(0)
+    setIncorrectCount(0)
+    setUsedAcronyms([])
+    setGameHistory([])
+    setIsTimerRunning(false)
+    setFeedback(null)
+    startNewQuestion()
   }
 
   if (!currentAcronym) {
@@ -138,8 +169,38 @@ function GamePage({ onGameEnd }) {
 
   return (
     <div className="game-container">
+      <button 
+        className="btn-instructions" 
+        onClick={() => setShowInstructions(!showInstructions)}
+      >
+        ❓ COMMENT JOUER
+      </button>
+
+      {showInstructions && (
+        <div className="modal-overlay" onClick={() => setShowInstructions(false)}>
+          <div className="modal-content card" onClick={e => e.stopPropagation()}>
+            <h3 style={{ color: 'var(--neon-purple)', marginBottom: '15px' }}>COMMENT JOUER</h3>
+            <ul className="instructions-list">
+              <li>Un acronyme tech s'affiche à l'écran</li>
+              <li>Le timer démarre dès que tu commences à taper</li>
+              <li>Tu as 1 minute pour en deviner un maximum</li>
+              <li>Saisis la signification complète et valide</li>
+              <li>Gagne 1 point par bonne réponse</li>
+              <li><strong>Astuce :</strong> Les tirets et espaces multiples sont ignorés</li>
+            </ul>
+            <button 
+              className="btn btn-primary" 
+              onClick={() => setShowInstructions(false)}
+              style={{ marginTop: '15px' }}
+            >
+              FERMER
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="game-info">
-        <div className={`timer ${timeLeft <= 10 ? 'warning' : ''}`}>
+        <div className={`timer ${timeLeft <= 10 ? 'warning' : ''} ${!isTimerRunning ? 'paused' : ''}`}>
           {timeLeft}s
         </div>
         <div className="score">
@@ -156,14 +217,15 @@ function GamePage({ onGameEnd }) {
           <input
             type="text"
             className="answer-input"
-            placeholder="ENTREZ LA SIGNIFICATION..."
+            placeholder={isTimerRunning ? "ENTREZ LA SIGNIFICATION..." : "TAPEZ POUR COMMENCER..."}
             value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             autoFocus
             autoComplete="off"
+            disabled={timeLeft <= 0}
           />
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary" disabled={timeLeft <= 0}>
             VALIDER
           </button>
         </div>
@@ -175,13 +237,28 @@ function GamePage({ onGameEnd }) {
         </div>
       )}
 
-      <button 
-        className="btn btn-danger" 
-        onClick={handleQuit}
-        style={{ marginTop: '20px' }}
-      >
-        ABANDONNER
-      </button>
+      <div style={{ display: 'flex', gap: '15px', marginTop: '20px' }}>
+        {!isTimerRunning && timeLeft === GAME_DURATION && (
+          <button 
+            className="btn btn-primary" 
+            onClick={startTimer}
+          >
+            COMMENCER
+          </button>
+        )}
+        <button 
+          className="btn btn-danger" 
+          onClick={handleQuit}
+        >
+          {isTimerRunning ? 'ABANDONNER' : 'QUITTER'}
+        </button>
+        <button 
+          className="btn" 
+          onClick={handleRestart}
+        >
+          RECOMMENCER
+        </button>
+      </div>
     </div>
   )
 }

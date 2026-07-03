@@ -466,3 +466,137 @@ body {
   background: var(--neon-pink);
   color: var(--bg-dark);
 }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.instructions-list {
+  list-style: none;
+  padding: 0;
+}
+
+.instructions-list li {
+  padding: 8px 0;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: 25px;
+}
+
+.instructions-list li::before {
+  content: '►';
+  position: absolute;
+  left: 0;
+  color: var(--neon-pink);
+}
+
+/* ===== BOUTON INSTRUCTIONS ===== */
+.btn-instructions {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  padding: 8px 15px;
+  background: transparent;
+  border: 1px solid var(--neon-blue);
+  color: var(--neon-blue);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.btn-instructions:hover {
+  background: rgba(0, 209, 255, 0.2);
+  box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* ===== TIMER PAUSÉ ===== */
+.timer.paused {
+  color: var(--text-secondary);
+  border-color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* ===== HISTORIQUE ===== */
+.history-card {
+  margin-top: 20px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 4px;
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  background: var(--bg-darker);
+}
+
+.history-item.correct {
+  border-left: 3px solid var(--neon-green);
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.history-item.incorrect {
+  border-left: 3px solid var(--neon-orange);
+  background: rgba(255, 110, 0, 0.1);
+}
+
+.history-acronym {
+  color: var(--neon-yellow);
+  font-weight: bold;
+  min-width: 80px;
+}
+
+.history-answers {
+  flex: 1;
+  text-align: right;
+}
+
+.history-user-answer {
+  color: var(--text-primary);
+}
+
+.history-correct-answer {
+  color: var(--neon-green);
+  font-style: italic;
+}
+
+/* ===== DISABLED STATE ===== */
+.answer-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
