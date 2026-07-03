@@ -255,7 +255,6 @@ body {
 }
 
 .answer-input {
-  flex: 1;
   font-family: var(--font-pixel);
   font-size: 1rem;
   padding: 12px 15px;
@@ -265,6 +264,12 @@ body {
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.answer-input.full-width {
+  width: 100%;
 }
 
 .answer-input:focus {

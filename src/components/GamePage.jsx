@@ -138,18 +138,6 @@ function GamePage({ onGameEnd }) {
     }
   }
 
-  // Quitter le jeu
-  const handleQuit = () => {
-    setIsTimerRunning(false)
-    onGameEnd({
-      score,
-      correctCount,
-      incorrectCount,
-      total: correctCount + incorrectCount,
-      history: gameHistory
-    })
-  }
-
   // Réinitialiser le jeu
   const handleRestart = () => {
     setTimeLeft(GAME_DURATION)
@@ -213,22 +201,17 @@ function GamePage({ onGameEnd }) {
       </h2>
 
       <form onSubmit={handleSubmit}>
-        <div className="input-container">
-          <input
-            type="text"
-            className="answer-input"
-            placeholder={isTimerRunning ? "ENTREZ LA SIGNIFICATION..." : "TAPEZ POUR COMMENCER..."}
-            value={answer}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            autoFocus
-            autoComplete="off"
-            disabled={timeLeft <= 0}
-          />
-          <button type="submit" className="btn btn-primary" disabled={timeLeft <= 0}>
-            VALIDER
-          </button>
-        </div>
+        <input
+          type="text"
+          className="answer-input full-width"
+          placeholder={isTimerRunning ? "ENTREZ LA SIGNIFICATION..." : "TAPEZ POUR COMMENCER..."}
+          value={answer}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          autoFocus
+          autoComplete="off"
+          disabled={timeLeft <= 0}
+        />
       </form>
 
       {feedback && (
@@ -237,21 +220,7 @@ function GamePage({ onGameEnd }) {
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: '15px', marginTop: '20px' }}>
-        {!isTimerRunning && timeLeft === GAME_DURATION && (
-          <button 
-            className="btn btn-primary" 
-            onClick={startTimer}
-          >
-            COMMENCER
-          </button>
-        )}
-        <button 
-          className="btn btn-danger" 
-          onClick={handleQuit}
-        >
-          {isTimerRunning ? 'ABANDONNER' : 'QUITTER'}
-        </button>
+      <div style={{ marginTop: '20px' }}>
         <button 
           className="btn" 
           onClick={handleRestart}
