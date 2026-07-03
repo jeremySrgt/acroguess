@@ -20,30 +20,33 @@ function GamePage({ onGameEnd }) {
     return str.toLowerCase().trim().replace(/\s+/g, ' ')
   }
 
-  // Choisir un acronyme aléatoire non utilisé
-  const getRandomAcronym = useCallback(() => {
+  // Démarrer une nouvelle question
+  const startNewQuestion = useCallback(() => {
     const availableAcronyms = acronymsData.filter(
       a => !usedAcronyms.includes(a.acronym)
     )
     
+    let newAcronym
+    let newUsedAcronyms = [...usedAcronyms]
+    
     if (availableAcronyms.length === 0) {
-      // Si tous les acronymes ont été utilisés, on les réinitialise
-      setUsedAcronyms([])
-      return getRandomAcronym()
+      // Si tous les acronymes ont été utilisés, on réinitialise
+      newUsedAcronyms = []
+      const allAcronyms = [...acronymsData]
+      const randomIndex = Math.floor(Math.random() * allAcronyms.length)
+      newAcronym = allAcronyms[randomIndex]
+      newUsedAcronyms.push(newAcronym.acronym)
+    } else {
+      const randomIndex = Math.floor(Math.random() * availableAcronyms.length)
+      newAcronym = availableAcronyms[randomIndex]
+      newUsedAcronyms.push(newAcronym.acronym)
     }
     
-    const randomIndex = Math.floor(Math.random() * availableAcronyms.length)
-    return availableAcronyms[randomIndex]
-  }, [usedAcronyms])
-
-  // Démarrer une nouvelle question
-  const startNewQuestion = useCallback(() => {
-    const newAcronym = getRandomAcronym()
     setCurrentAcronym(newAcronym)
     setAnswer('')
     setFeedback(null)
-    setUsedAcronyms(prev => [...prev, newAcronym.acronym])
-  }, [getRandomAcronym])
+    setUsedAcronyms(newUsedAcronyms)
+  }, [usedAcronyms])
 
   // Démarrer le jeu
   useEffect(() => {
@@ -53,7 +56,7 @@ function GamePage({ onGameEnd }) {
     return () => {
       setIsGameActive(false)
     }
-  }, [startNewQuestion])
+  }, [])
 
   // Timer
   useEffect(() => {
