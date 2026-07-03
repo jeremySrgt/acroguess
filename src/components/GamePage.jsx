@@ -93,7 +93,14 @@ function GamePage({ onGameEnd }) {
     const normalizedAnswer = normalizeString(answer)
     const normalizedMeaning = normalizeString(currentAcronym.meaning)
     
-    const isCorrect = normalizedAnswer === normalizedMeaning
+    // Vérifier si la réponse correspond à la signification principale ou à une alternative
+    let isCorrect = normalizedAnswer === normalizedMeaning
+    
+    if (!isCorrect && currentAcronym.alternatives) {
+      isCorrect = currentAcronym.alternatives.some(alt => 
+        normalizeString(alt) === normalizedAnswer
+      )
+    }
     
     const historyEntry = {
       acronym: currentAcronym.acronym,

@@ -2,11 +2,13 @@
   {
     "acronym": "AWS",
     "meaning": "Amazon Web Services",
+    "alternatives": ["Amazon Web Service"],
     "category": "Cloud"
   },
   {
     "acronym": "HDMI",
     "meaning": "High-Definition Multimedia Interface",
+    "alternatives": ["High Definition Multimedia Interface"],
     "category": "Hardware"
   },
   {
@@ -67,6 +69,7 @@
   {
     "acronym": "CSS",
     "meaning": "Cascading Style Sheets",
+    "alternatives": ["Cascading Style Sheet"],
     "category": "Web"
   },
   {
@@ -97,6 +100,7 @@
   {
     "acronym": "GPU",
     "meaning": "Graphics Processing Unit",
+    "alternatives": ["Graphic Processing Unit"],
     "category": "Hardware"
   },
   {
@@ -107,16 +111,19 @@
   {
     "acronym": "LAN",
     "meaning": "Local Area Network",
+    "alternatives": ["Local Area Net"],
     "category": "Network"
   },
   {
     "acronym": "WAN",
     "meaning": "Wide Area Network",
+    "alternatives": ["Wide Area Net"],
     "category": "Network"
   },
   {
     "acronym": "VPN",
     "meaning": "Virtual Private Network",
+    "alternatives": ["Virtual Private Net"],
     "category": "Network"
   },
   {
